@@ -1,6 +1,7 @@
 //
-// Copyright 2018 Staysail Systems, Inc. <info@staysail.tech>
+// Copyright 2020 Staysail Systems, Inc. <info@staysail.tech>
 // Copyright 2018 Capitar IT Group BV <info@capitar.com>
+// Copyright 2020 Dirac Research <robert.bielik@dirac.com>
 //
 // This software is supplied under the terms of the MIT License, a
 // copy of which should be located in the distribution where this
@@ -182,7 +183,7 @@ NNG_DECL int nng_http_res_set_status(nng_http_res *, uint16_t);
 // that the server responds (or responded) with.
 NNG_DECL const char *nng_http_res_get_reason(nng_http_res *);
 
-// nng_http_res_set_rason sets the human readable status message.
+// nng_http_res_set_reason sets the human readable status message.
 // NULL means that a default reason is used based on the status code.
 NNG_DECL int nng_http_res_set_reason(nng_http_res *, const char *);
 
@@ -305,9 +306,9 @@ typedef struct nng_http_handler nng_http_handler;
 // first output using nng_aio_set_output.  If it does not do so, or supplies
 // NULL, then it must send a response itself.
 //
-// The callback should return 0 in most circumstances; if it returns anything
-// other than 0 then the connection is terminated (after possibly sending
-// a 500 error response to the client.)
+// The callback should complete with a result of 0 in most circumstances.
+// If it completes with an error, then the connection is terminated, after
+// possibly sending a 500 error response to the client.
 NNG_DECL int nng_http_handler_alloc(
     nng_http_handler **, const char *, void (*)(nng_aio *));
 
@@ -367,15 +368,23 @@ NNG_DECL int nng_http_handler_set_host(nng_http_handler *, const char *);
 NNG_DECL int nng_http_handler_collect_body(nng_http_handler *, bool, size_t);
 
 // nng_http_handler_set_tree indicates that the handler is being registered
-// for a heirarchical tree, rather than just a single path, so it will be
+// for a hierarchical tree, rather than just a single path, so it will be
 // called for all child paths supplied.  By default the handler is only
 // called for an exact path match.
 NNG_DECL int nng_http_handler_set_tree(nng_http_handler *);
 
+// nng_http_handler_set_tree_exclusive indicates that the handler is being
+// registered for a heirarchical tree *exclusively*, rather than just a single
+// path, so it will be called for all child paths supplied. By default the
+// handler is only called for an exact path match. Exclusive means that any
+// other handler on a conflicting path will induce an address conflict error
+// when added to a server.
+NNG_DECL int nng_http_handler_set_tree_exclusive(nng_http_handler *);
+
 // nng_http_handler_set_data is used to store additional data, along with
-// a possible clean up routine.  (The clean up is a custom deallocator and
+// a possible clean up routine.  (The clean up is a custom de-allocator and
 // will be called with the supplied data as an argument, when the handler
-// is being deallocated.)
+// is being de-allocated.)
 NNG_DECL int nng_http_handler_set_data(
     nng_http_handler *, void *, void (*)(void *));
 
@@ -436,6 +445,11 @@ NNG_DECL int nng_http_server_set_tls(
 // nng_http_server_set_tls function is called, so be careful.
 NNG_DECL int nng_http_server_get_tls(
     nng_http_server *, struct nng_tls_config **);
+
+// nng_http_server_get_addr obtains the address with which the server was
+// initialized or returns NNG_EINVAL. Useful for instance when the port has
+// been automatically assigned.
+NNG_DECL int nng_http_server_get_addr(nng_http_server *, nng_sockaddr *);
 
 // nng_http_server_set_error_page sets a custom error page (HTML) content
 // to be sent for the given error code.  This is used when the error is
@@ -509,15 +523,12 @@ NNG_DECL void nng_http_client_connect(nng_http_client *, nng_aio *);
 // single HTTP transaction).  It will not automatically close the connection,
 // unless some kind of significant error occurs.  The caller should close
 // the connection if the aio does not complete successfully.
-// Note that this will fail with NNG_ENOTSUP if the server attempts to reply
-// with a chunked transfer encoding.
 NNG_DECL void nng_http_conn_transact(
     nng_http_conn *, nng_http_req *, nng_http_res *, nng_aio *);
 
 // nng_http_client_transact is used to execute a single transaction to a
 // server. The connection is opened, and will be closed when the transaction is
-// complete.  Note that this will fail with NNG_ENOTSUP if the server attempts
-// to reply with a chunked transfer encoding.
+// complete.
 NNG_DECL void nng_http_client_transact(
     nng_http_client *, nng_http_req *, nng_http_res *, nng_aio *);
 

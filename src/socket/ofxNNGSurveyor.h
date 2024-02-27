@@ -4,7 +4,7 @@
 #include "nng.h"
 #include "survey0/survey.h"
 #include "supplemental/util/platform.h"
-#include "ofLog.h"
+//#include "ofLog.h"
 #include "ASyncWork.h"
 #include "ofxNNGMessage.h"
 #include "ofxNNGNode.h"
@@ -115,7 +115,7 @@ private:
 		callback_[work.first](std::move(work.second));
 		nng_mtx_unlock(callback_mtx_);
 	}
-	bool sendImpl(Message msg, std::function<void(Message)> func) {
+	bool sendImpl(Message& msg, std::function<void(Message)> func) {
 		aio::Work *work = nullptr;
 		nng_mtx_lock(work_mtx_);
 		work = work_.getUnused();

@@ -9,9 +9,9 @@
 #include "ofxNNGMessage.h"
 #include "detail/apply.h"
 
-#include "ofLog.h"
-#include "ofEventUtils.h"
-#include "ofEvents.h"
+//#include "ofLog.h"
+//#include "ofEventUtils.h"
+//#include "ofEvents.h"
 #include "ofThreadChannel.h"
 #include <map>
 

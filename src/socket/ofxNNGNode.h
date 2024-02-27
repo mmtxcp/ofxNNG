@@ -1,11 +1,12 @@
 #pragma once
-
+#include "ofLog.h"
+#include "ofEvents.h"
 #include "nng.h"
 #include <map>
+#include <memory>
 #include <vector>
 #include <string>
 #include <functional>
-
 namespace ofxNNG {
 class Pipe
 {
@@ -151,7 +152,9 @@ protected:
 		is_enabled_auto_update_ = enabled;
 	}
 	bool isEnabledAutoUpdate() const { return is_enabled_auto_update_; }
-	void update(ofEventArgs&) { update(); }
+	void update(ofEventArgs&) {
+		update(); 
+	}
 	virtual void update(){}
 };
 }

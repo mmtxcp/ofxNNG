@@ -1,5 +1,5 @@
 //
-// Copyright 2018 Staysail Systems, Inc. <info@staysail.tech>
+// Copyright 2023 Staysail Systems, Inc. <info@staysail.tech>
 // Copyright 2018 Capitar IT Group BV <info@capitar.com>
 //
 // This software is supplied under the terms of the MIT License, a
@@ -27,13 +27,9 @@
 extern "C" {
 #endif
 
-// nng_time represents an absolute time since some arbitrary point in the
-// past, measured in milliseconds.  The values are always positive.
-typedef uint64_t nng_time;
-
 // Return an absolute time from some arbitrary point.  The value is
 // provided in milliseconds, and is of limited resolution based on the
-// system clock.  (Do not use it for fine grained performance measurements.)
+// system clock.  (Do not use it for fine-grained performance measurements.)
 NNG_DECL nng_time nng_clock(void);
 
 // Sleep for specified msecs.
@@ -49,17 +45,22 @@ typedef struct nng_thread nng_thread;
 // I/O APIs provided by nng.  The thread runs until completion.
 NNG_DECL int nng_thread_create(nng_thread **, void (*)(void *), void *);
 
+// Set the thread name.  Support for this is platform specific and varies.
+// It is intended to provide information for use when debugging applications,
+// and not for programmatic use beyond that.
+NNG_DECL void nng_thread_set_name(nng_thread *, const char *);
+
 // Destroy a thread (waiting for it to complete.)  When this function
 // returns all resources for the thread are cleaned up.
 NNG_DECL void nng_thread_destroy(nng_thread *);
 
-// nng_mtx represents a mutex, which is a simple, non-retrant, boolean lock.
+// nng_mtx represents a mutex, which is a simple, non-reentrant, boolean lock.
 typedef struct nng_mtx nng_mtx;
 
 // nng_mtx_alloc allocates a mutex structure.
 NNG_DECL int nng_mtx_alloc(nng_mtx **);
 
-// nng_mtx_free frees the mutex.  It most not be locked.
+// nng_mtx_free frees the mutex.  It must not be locked.
 NNG_DECL void nng_mtx_free(nng_mtx *);
 
 // nng_mtx_lock locks the mutex; if it is already locked it will block
@@ -93,11 +94,18 @@ NNG_DECL void nng_cv_wake(nng_cv *);
 
 // nng_cv_wake1 wakes only one thread waiting on the condition.  This may
 // reduce the thundering herd problem, but care must be taken to ensure
-// that no waiter starves forvever.
+// that no waiter starves forever.
 NNG_DECL void nng_cv_wake1(nng_cv *);
 
 // nng_random returns a "strong" (cryptographic sense) random number.
 NNG_DECL uint32_t nng_random(void);
+
+// nng_socket_pair is used to create a bound pair of file descriptors
+// typically using the socketpair() call.  The descriptors are backed
+// by reliable, bidirectional, byte streams.  This will return NNG_ENOTSUP
+// if the platform lacks support for this.  The argument is a pointer
+// to an array of file descriptors (or HANDLES or similar).
+NNG_DECL int nng_socket_pair(int [2]);
 
 #ifdef __cplusplus
 }

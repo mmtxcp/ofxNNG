@@ -4,7 +4,7 @@
 #include "nng.h"
 #include "pair0/pair.h"
 #include "pair1/pair.h"
-#include "ofLog.h"
+//#include "ofLog.h"
 #include "ASyncWork.h"
 #include "ofxNNGMessage.h"
 #include "ofThreadChannel.h"

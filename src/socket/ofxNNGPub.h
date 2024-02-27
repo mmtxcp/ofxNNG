@@ -4,7 +4,7 @@
 #include "nng.h"
 #include "pubsub0/pub.h"
 #include "ofxNNGNode.h"
-#include "ofLog.h"
+//#include "ofLog.h"
 #include "ofxNNGMessage.h"
 
 namespace ofxNNG {

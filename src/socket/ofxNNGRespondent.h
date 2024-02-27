@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include "nng.h"
 #include "survey0/respond.h"
-#include "ofLog.h"
+//#include "ofLog.h"
 #include "ASyncWork.h"
 #include "ofxNNGMessage.h"
 #include "ofThreadChannel.h"
