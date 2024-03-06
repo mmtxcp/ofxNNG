@@ -14,8 +14,8 @@
 #include <stack>
 #include <unordered_set>
 #include <unordered_map>
-#include "ofFileUtils.h"
-//#include "ofJson.h"
+#include "ofx/utils/ofFileUtils.h"
+//#include "ofx/utils/ofJson.h"
 #include "detail/user_optimization.h"
 #include "nlohmann/json.hpp"
 
@@ -666,4 +666,4 @@ template<typename ...T> struct converter<Type<T...>> : detail::container::common
 }
 }
 
-#include "ofxNNGMessageADLConverter.h"
+#include "message/ofxNNGMessageADLConverter.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofEvent.h"
+#include "ofx/events/ofEvent.h"
 #include <stdio.h>
 #include <stdlib.h>
 

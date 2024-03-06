@@ -1,6 +1,6 @@
 
-#include "ofEvents.h"
-#include "ofLog.h"
+#include "ofx/events/ofEvents.h"
+#include "ofx/utils/ofLog.h"
 
 static ofEventArgs voidEventArgs;
 

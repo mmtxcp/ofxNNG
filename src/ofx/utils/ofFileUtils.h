@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofConstants.h"
+#include "ofx/utils/ofConstants.h"
 using namespace std;
 
 //----------------------------------------------------------

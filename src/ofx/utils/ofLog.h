@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "ofUtils.h"
+#include "ofx/utils/ofUtils.h"
 namespace ofxNNG {
 #define ofLogFatalError(module) std::cerr << std::endl << ofGetTimestampString() <<" "<<  module <<" "
 #define ofLogError(module) std::cerr << std::endl << ofGetTimestampString() <<" "<< module <<" "

@@ -2,10 +2,10 @@
 
 #include <stddef.h>
 #include "nng.h"
-#include "pubsub0/pub.h"
-#include "ofxNNGNode.h"
-//#include "ofLog.h"
-#include "ofxNNGMessage.h"
+#include "protocol/pubsub0/pub.h"
+#include "socket/ofxNNGNode.h"
+//#include "ofx/utils/ofLog.h"
+#include "message/ofxNNGMessage.h"
 
 namespace ofxNNG {
 class Pub : public Node

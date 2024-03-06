@@ -2,8 +2,8 @@
 
 #include "nng.h"
 #include "protocol/bus0/bus.h"
-#include "ofxNNGNode.h"
-#include "ofxNNGMessage.h"
+#include "socket/ofxNNGNode.h"
+#include "message/ofxNNGMessage.h"
 #include "detail/apply.h"
 
 namespace ofxNNG {

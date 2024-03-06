@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ofxNNGMessage.h"
-#include "ofFileUtils.h"
+#include "message/ofxNNGMessage.h"
+#include "ofx/utils/ofFileUtils.h"
 
 namespace ofxNNG {
 	struct Serialize : Message {

@@ -1,9 +1,9 @@
-#include "ofFileUtils.h"
+#include "ofx/utils/ofFileUtils.h"
 #ifndef TARGET_WIN32
 #include <pwd.h>
 #endif
 
-//#include "ofUtils.h"
+//#include "ofx/utils/ofUtils.h"
 #include <fstream>
 
 #ifdef TARGET_OSX

@@ -3,9 +3,9 @@
 #define GLM_FORCE_CTOR_INIT
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include "ofEventUtils.h"
+#include "ofx/events/ofEventUtils.h"
 
-#include "ofTimer.h"
+#include "ofx/utils/ofTimer.h"
 #include <set>
 
 

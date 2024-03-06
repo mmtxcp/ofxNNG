@@ -1,9 +1,9 @@
-#include "ofUtils.h"
+#include "ofx/utils/ofUtils.h"
 // FIXME: split ofUtils in two files, one which uses urlparser / ofImage, other without for smaller apps.
 
-#include "ofEvents.h"
+#include "ofx/events/ofEvents.h"
 
-#include "ofLog.h"
+#include "ofx/utils/ofLog.h"
 
 
 #include <chrono>

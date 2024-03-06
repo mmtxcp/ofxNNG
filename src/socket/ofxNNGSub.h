@@ -3,16 +3,16 @@
 #include <stddef.h>
 #include "nng.h"
 #include "supplemental/util/platform.h"
-#include "pubsub0/sub.h"
-#include "ASyncWork.h"
-#include "ofxNNGNode.h"
-#include "ofxNNGMessage.h"
+#include "protocol/pubsub0/sub.h"
+#include "util/ASyncWork.h"
+#include "socket/ofxNNGNode.h"
+#include "message/ofxNNGMessage.h"
 #include "detail/apply.h"
 
-//#include "ofLog.h"
-//#include "ofEventUtils.h"
-//#include "ofEvents.h"
-#include "ofThreadChannel.h"
+//#include "ofx/utils/ofLog.h"
+//#include "ofx/events/ofEventUtils.h"
+//#include "ofx/events/ofEvents.h"
+#include "ofx/utils/ofThreadChannel.h"
 #include <map>
 
 namespace ofxNNG {

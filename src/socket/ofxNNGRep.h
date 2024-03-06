@@ -2,12 +2,12 @@
 
 #include <stddef.h>
 #include "nng.h"
-#include "reqrep0/rep.h"
-//#include "ofLog.h"
-#include "ASyncWork.h"
-#include "ofxNNGMessage.h"
-#include "ofThreadChannel.h"
-#include "ofxNNGNode.h"
+#include "protocol/reqrep0/rep.h"
+//#include "ofx/utils/ofLog.h"
+#include "util/ASyncWork.h"
+#include "message/ofxNNGMessage.h"
+#include "ofx/utils/ofThreadChannel.h"
+#include "socket/ofxNNGNode.h"
 #include "detail/apply.h"
 
 namespace ofxNNG {

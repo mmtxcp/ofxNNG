@@ -2,12 +2,12 @@
 
 #include <stddef.h>
 #include "nng.h"
-#include "survey0/survey.h"
+#include "protocol/survey0/survey.h"
 #include "supplemental/util/platform.h"
-//#include "ofLog.h"
-#include "ASyncWork.h"
-#include "ofxNNGMessage.h"
-#include "ofxNNGNode.h"
+//#include "ofx/utils/ofLog.h"
+#include "util/ASyncWork.h"
+#include "message/ofxNNGMessage.h"
+#include "socket/ofxNNGNode.h"
 #include "detail/apply.h"
 
 namespace ofxNNG {

@@ -1,6 +1,6 @@
 #pragma once
-#include "ofLog.h"
-#include "ofEvents.h"
+#include "ofx/utils/ofLog.h"
+#include "ofx/events/ofEvents.h"
 #include "nng.h"
 #include <map>
 #include <memory>

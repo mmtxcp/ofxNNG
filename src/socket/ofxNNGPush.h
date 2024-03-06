@@ -2,10 +2,10 @@
 
 #include <stddef.h>
 #include "nng.h"
-#include "pipeline0/push.h"
-#include "ASyncWork.h"
-#include "ofxNNGMessage.h"
-#include "ofxNNGNode.h"
+#include "protocol/pipeline0/push.h"
+#include "util/ASyncWork.h"
+#include "message/ofxNNGMessage.h"
+#include "socket/ofxNNGNode.h"
 
 namespace ofxNNG {
 class Push : public Node

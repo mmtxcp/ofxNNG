@@ -3,11 +3,11 @@
 #include <stddef.h>
 #include "nng.h"
 #include "supplemental/util/platform.h"
-#include "pipeline0/pull.h"
-#include "ASyncWork.h"
-#include "ofxNNGMessage.h"
-#include "ofxNNGNode.h"
-#include "ofThreadChannel.h"
+#include "protocol/pipeline0/pull.h"
+#include "util/ASyncWork.h"
+#include "message/ofxNNGMessage.h"
+#include "socket/ofxNNGNode.h"
+#include "ofx/utils/ofThreadChannel.h"
 #include "detail/apply.h"
 
 namespace ofxNNG {

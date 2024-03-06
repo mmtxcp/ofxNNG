@@ -1,7 +1,7 @@
 #pragma once
 // MARK: TARGET_MINGW test
-#include "ofConstants.h"
-#include "ofUtils.h"
+#include "ofx/utils/ofConstants.h"
+#include "ofx/utils/ofUtils.h"
 #include <algorithm>
 #include <bitset> // For ofToBinary.
 #include <chrono>

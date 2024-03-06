@@ -105,7 +105,7 @@ protected:
 };
 }
 
-#include "ofxNNGMessageConvertFunction.h"
+#include "message/ofxNNGMessageConvertFunction.h"
 
 namespace ofxNNG {
 	template<typename Arg, typename ...Rest>

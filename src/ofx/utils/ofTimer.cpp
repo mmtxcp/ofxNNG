@@ -1,4 +1,4 @@
-#include "ofTimer.h"
+#include "ofx/utils/ofTimer.h"
 
 #define NANOS_PER_SEC 1000000000ll
 

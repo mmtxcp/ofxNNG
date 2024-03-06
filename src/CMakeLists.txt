@@ -1,5 +1,5 @@
 #KQServerHandler
-PROJECT(Demo)
+PROJECT(ofxNNG)
 MESSAGE(STATUS "Project ${PROJECT_NAME} ...")
 # Directories
 #set(SDK_BASE_DIR "${PROJECT_SOURCE_DIR}")
@@ -28,20 +28,16 @@ MESSAGE(STATUS "THIRD_LIB=${THIRD_LIB}")
 
 FILE(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/*.h ${PROJECT_SOURCE_DIR}/*.hpp)
 FILE(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/*.c ${PROJECT_SOURCE_DIR}/*.cpp ${PROJECT_SOURCE_DIR}/*.cc)
-SOURCE_GROUP("Header Files" FILES ${HEADER_FILES})
-SOURCE_GROUP("Source Files" FILES ${SRC_FILES})
+#SOURCE_GROUP("Header Files" FILES ${HEADER_FILES})
+#SOURCE_GROUP("Source Files" FILES ${SRC_FILES})
 #source_group(TREE "${PROJECT_SOURCE_DIR}" FILES ${SRC_FILES})
 
-
-FILE(GLOB_RECURSE OFX_FILES ${INC_BASE_DIR}/ofx/utils/*.c* ${INC_BASE_DIR}/ofx/utils/*.h* 
-    ${INC_BASE_DIR}/ofx/events/*.c* ${INC_BASE_DIR}/ofx/events/*.h*)
-SOURCE_GROUP("OFX Files" FILES ${OFX_FILES})
-SOURCE_GROUP("Base Files" FILES ${INC_FILES})
+#SOURCE_GROUP("Base Files" FILES ${INC_FILES})
 
 #head file path
 INCLUDE_DIRECTORIES(
-        ${INC_BASE_DIR}
-        ${PROJECT_SOURCE_DIR}
+        #${INC_BASE_DIR}
+        #${PROJECT_SOURCE_DIR}
         ${THIRD_INC}
         #${THIRD_INC}/protocol
 		#${INC_BASE_DIR}/detail
@@ -51,6 +47,20 @@ INCLUDE_DIRECTORIES(
 		#${INC_BASE_DIR}/ofx/utils
 		#${INC_BASE_DIR}/ofx/events
 )
+function(INCLUDE_AND_GROUP_FILES SOURCE_DIR)
+    include_directories(${SOURCE_DIR})
+    file(GLOB_RECURSE source_files "${SOURCE_DIR}/*.c*" "${SOURCE_DIR}/*.h*")
+    foreach(source_file ${source_files})
+        file(RELATIVE_PATH relative_path ${SOURCE_DIR} ${source_file})
+        get_filename_component(group_name ${relative_path} DIRECTORY)
+        if(NOT "${group_name}" STREQUAL "")
+            string(REPLACE "/" "\\" group_name ${group_name})
+            source_group(${group_name} FILES ${source_file})
+        endif()     
+    endforeach()
+endfunction()
+# 调用示例
+INCLUDE_AND_GROUP_FILES("${PROJECT_SOURCE_DIR}")
 # SDK files
 # file(GLOB SDK_GEOMETRY_FILES
 #         "${PROJECT_SOURCE_DIR}/*.cpp"
@@ -60,7 +70,6 @@ INCLUDE_DIRECTORIES(
 #库搜索目录
 LINK_DIRECTORIES(
         ${THIRD_LIB}
-        ${OUTPUT_DIR}
 )
 #设置为控制台应用程序
 IF(MSVC)
@@ -73,16 +82,19 @@ ENDIF()
 #ADD_LIBRARY (${PROJECT_NAME} SHARED "")
 #SET(OUTPUT_FILE_TYPE "LIBRARY")
 #生成可执行文件
-ADD_EXECUTABLE (${PROJECT_NAME})
-SET(OUTPUT_FILE_TYPE "RUNTIME")
+#ADD_EXECUTABLE (${PROJECT_NAME})
+#SET(OUTPUT_FILE_TYPE "RUNTIME")
+# 生成静态库
+add_library(${PROJECT_NAME} STATIC "")
+# 设置输出文件类型为静态库
+SET(OUTPUT_FILE_TYPE "ARCHIVE")
 
 TARGET_SOURCES(${PROJECT_NAME}
     PRIVATE
     ${SRC_FILES}
     ${HEADER_FILES}
-    #${INC_FILES}
-	#${INC_BASE_DIR}
-    #${OFX_FILES}
+    ${INC_FILES}
+	${INC_BASE_DIR}
 )
 #find_package(ZLIB REQUIRED)
 
@@ -95,14 +107,13 @@ if(CMAKE_HOST_UNIX)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
         nng
-        ofxNNG
+       
         pthread
     )
 else()
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
 		nng
-        ofxNNG
         shlwapi
         rpcrt4
         ws2_32
@@ -113,3 +124,24 @@ else()
 endif(CMAKE_HOST_UNIX)
 #指定插件后缀
 #set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ${SHARED_LIBRARY_SUFFIX})
+
+
+MESSAGE(STATUS "PROJECT_SOURCE_DIR= ${PROJECT_SOURCE_DIR} ")
+
+function(COPY_FILES_WITHOUT_MATCHING source_dir dest_dir patterns)
+    file(GLOB_RECURSE files "${source_dir}/*")
+    foreach(file ${files})
+        get_filename_component(relative_path ${file} PATH)
+        file(RELATIVE_PATH relative_path ${source_dir} ${relative_path})
+        get_filename_component(file_name ${file} NAME)
+        foreach(pattern ${patterns})
+            string(REGEX MATCH ${pattern} match_result ${file_name})
+            if(NOT match_result)
+                file(COPY ${file} DESTINATION "${dest_dir}/${relative_path}")
+            endif()
+        endforeach()
+    endforeach()
+endfunction()
+
+set(ignore_suffixes ".cpp" ".c")
+COPY_FILES_WITHOUT_MATCHING("${INC_BASE_DIR}" "${EXPORT_INCLUDE}" ${ignore_suffixes})

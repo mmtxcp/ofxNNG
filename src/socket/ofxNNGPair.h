@@ -2,13 +2,13 @@
 
 #include <stddef.h>
 #include "nng.h"
-#include "pair0/pair.h"
-#include "pair1/pair.h"
-//#include "ofLog.h"
-#include "ASyncWork.h"
-#include "ofxNNGMessage.h"
-#include "ofThreadChannel.h"
-#include "ofxNNGNode.h"
+#include "protocol/pair0/pair.h"
+#include "protocol/pair1/pair.h"
+//#include "ofx/utils/ofLog.h"
+#include "util/ASyncWork.h"
+#include "message/ofxNNGMessage.h"
+#include "ofx/utils/ofThreadChannel.h"
+#include "socket/ofxNNGNode.h"
 #include "detail/apply.h"
 
 namespace ofxNNG {
