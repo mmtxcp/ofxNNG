@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <stddef.h>
 #include "nng.h"
@@ -42,9 +42,10 @@ public:
 	}
 	template<typename ...Ref>
 	void setCallback(Ref &...refs) {
-		callback_ = [&refs...](Message msg) {
-			msg.to(refs...);
-		};
+        callback_ = defaultMsgConvFun;
+        /*callback_ = [&refs...](Message msg) {
+            msg.to(refs...);
+        };*/
 	}
 private:
 	nng_aio *aio_;

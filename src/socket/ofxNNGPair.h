@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <stddef.h>
 #include "nng.h"
@@ -61,9 +61,10 @@ public:
 	}
 	template<typename ...Ref>
 	void setCallback(Ref &...refs) {
-		callback_ = [&refs...](Message msg) {
+        callback_ = defaultMsgConvFun;
+		/*callback_ = [&refs...](Message msg) {
 			msg.to(refs...);
-		};
+		};*/
 	}
 	bool send(Message msg, bool blocking = false, nng_pipe pipe=NNG_PIPE_INITIALIZER) {
 		if(nng_pipe_id(pipe) != -1) {	// nng_pipe_id returns -1 for invalid pipe

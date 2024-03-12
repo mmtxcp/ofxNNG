@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <stddef.h>
 #include "nng.h"
@@ -45,9 +45,10 @@ public:
 	}
 	template<typename ...Ref>
 	bool send(Message msg, Ref &...refs) {
-		return sendImpl(msg, [&refs...](Message msg) {
-			msg.to(refs...);
-		});
+        return sendImpl(msg, defaultMsgConvFun);
+		/*return sendImpl(msg, [&refs...](Message msg) {
+			//msg.to(refs...);
+		});*/
 	}
 	template<typename ...Args, typename F>
 	auto send(Message msg, F &&func)
@@ -110,6 +111,7 @@ private:
 	void closeWork(aio::Work *work) {
 		nng_ctx_close(work->ctx);
 		nng_mtx_lock(work_mtx_);
+		work->state = aio::SEND;
 		work->release();
 		nng_mtx_unlock(work_mtx_);
 	}

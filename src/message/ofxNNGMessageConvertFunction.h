@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "nng.h"
 #include <type_traits>
@@ -481,22 +481,22 @@ template<typename ...T> struct converter<Type<T...>> : detail::container::common
 //			msg.append(t.x, t.y, t.width, t.height);
 //		}
 //	};
-//	template<>
-//	struct converter<ofBuffer> {
-//		using T = ofBuffer;
-//		static inline size_type from_msg(T &t, const Message &msg, size_type offset) {
-//			auto pos = offset;
-//			size_type size;
-//			pos += msg.to(pos, size);
-//			auto data = (const char*)msg.data();
-//			t.set(data+pos, size);
-//			return pos+size-offset;
-//		}
-//		static inline void append_to_msg(Message &msg, const T &t) {
-//			msg.append(t.size());
-//			msg.appendData(t.getData(), t.size());
-//		}
-//	};
+    template<>
+    struct converter<ofBuffer> {
+        using T = ofBuffer;
+        static inline size_type from_msg(T& t, const Message& msg, size_type offset) {
+            auto pos = offset;
+            size_type size;
+            pos += msg.to(pos, size);
+            auto data = (const char*)msg.data();
+            t.set(data + pos, size);
+            return pos + size - offset;
+        }
+        static inline void append_to_msg(Message& msg, const T& t) {
+            msg.append(t.size());
+            msg.appendData(t.getData(), t.size());
+        }
+    };
 //	template<>
 //	struct converter<ofJson> {
 //		using T = ofJson;

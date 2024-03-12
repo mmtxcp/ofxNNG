@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <stddef.h>
 #include "nng.h"
@@ -44,9 +44,10 @@ public:
 	}
 	template<typename ...Ref>
 	bool send(Message msg, Ref &...refs) {
-		return sendImpl(msg, [&refs...](Message msg) {
+        return sendImpl(msg, defaultMsgConvFun);
+		/*return sendImpl(msg, [&refs...](Message msg) {
 			msg.to(refs...);
-		});
+		});*/
 	}
 	template<typename ...Args, typename F>
 	auto send(Message msg, F &&func)

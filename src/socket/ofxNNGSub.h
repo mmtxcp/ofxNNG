@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <stddef.h>
 #include "nng.h"
@@ -30,6 +30,7 @@ public:
 			ofLogError("ofxNNGSub") << "failed to open socket;" << nng_strerror(result);
 			return false;
 		}
+        
 		setEnabledAutoUpdate(!s.allow_callback_from_other_thread);
 		nng_aio_alloc(&aio_, &Sub::receive, this);
 		nng_recv_aio(socket_, aio_);
@@ -55,15 +56,17 @@ public:
 	}
 	template<typename ...Ref>
 	bool subscribe(const std::string &topic, Ref &...refs) {
-		return subscribe(topic.data(), topic.size(), [&refs...](Message msg) {
+		return subscribe(topic.data(), topic.size(), defaultMsgConvFun);
+        /*return subscribe(topic.data(), topic.size(), [&refs...](Message msg) {
 			msg.to(refs...);
-		});
+		});*/
 	}
 	template<typename ...Ref>
 	bool subscribe(const std::pair<const void*, std::size_t> &topic, Ref &...refs) {
-		return subscribe(topic.first, topic.second, [&refs...](Message msg) {
-			msg.to(refs...);
-		});
+        return subscribe(topic.first, topic.second, defaultMsgConvFun);
+        /*return subscribe(topic.first, topic.second, [&refs...](Message msg) {
+            msg.to(refs...);
+        });*/
 	}
 
 	bool unsubscribe(const std::string &topic) {

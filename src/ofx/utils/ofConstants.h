@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // version: ------------------------
 #define OF_VERSION_MAJOR 0
@@ -191,7 +191,7 @@ enum ofTargetPlatform{
 	#ifndef __MACOSX_CORE__
 		#define __MACOSX_CORE__
 	#endif
-	#include "GL/glew.h"
+	//#include "GL/glew.h"
 	// #include <ApplicationServices/ApplicationServices.h>
 
 	#if defined(__LITTLE_ENDIAN__)
@@ -207,25 +207,25 @@ enum ofTargetPlatform{
 
 	// #include <unistd.h>
 
-	#ifdef TARGET_LINUX_ARM
-		#ifdef TARGET_RASPBERRY_PI
-			#include <bcm_host.h>
-			// rpi firmware headers define countof
-			// which messes up other libraries like glm
-			#undef countof
-		#endif
+	//#ifdef TARGET_LINUX_ARM
+	//	#ifdef TARGET_RASPBERRY_PI
+	//		#include <bcm_host.h>
+	//		// rpi firmware headers define countof
+	//		// which messes up other libraries like glm
+	//		#undef countof
+	//	#endif
 
-		#include <GLES/gl.h>
-		#include <GLES/glext.h>
-		#include <GLES2/gl2.h>
-		#include <GLES2/gl2ext.h>
+	//	#include <GLES/gl.h>
+	//	#include <GLES/glext.h>
+	//	#include <GLES2/gl2.h>
+	//	#include <GLES2/gl2ext.h>
 
-		#define EGL_EGLEXT_PROTOTYPES
-		#include <EGL/egl.h>
-		#include <EGL/eglext.h>
-	#else // desktop linux
-		#include <GL/glew.h> 
-	#endif
+	//	#define EGL_EGLEXT_PROTOTYPES
+	//	#include <EGL/egl.h>
+	//	#include <EGL/eglext.h>
+	//#else // desktop linux
+	//	#include <GL/glew.h> 
+	//#endif
 
 	// for some reason, this isn't defined at compile time,
 	// so this hack let's us work
@@ -243,11 +243,11 @@ enum ofTargetPlatform{
 
 
 #ifdef TARGET_OF_IOS
-	#import <OpenGLES/ES1/gl.h>
+	/*#import <OpenGLES/ES1/gl.h>
 	#import <OpenGLES/ES1/glext.h>
 
 	#import <OpenGLES/ES2/gl.h>
-	#import <OpenGLES/ES2/glext.h>
+	#import <OpenGLES/ES2/glext.h>*/
 
 
 	#define TARGET_LITTLE_ENDIAN		// arm cpu
@@ -261,19 +261,19 @@ enum ofTargetPlatform{
 #ifdef TARGET_ANDROID
 	#include <typeinfo>
 	// #include <unistd.h>
-	#include <GLES/gl.h>
+	/*#include <GLES/gl.h>
 	#define GL_GLEXT_PROTOTYPES
 	#include <GLES/glext.h>
 
 	#include <GLES2/gl2.h>
-	#include <GLES2/gl2ext.h>
+	#include <GLES2/gl2ext.h>*/
 
 	#define TARGET_LITTLE_ENDIAN
 #endif
 
 #ifdef TARGET_EMSCRIPTEN
 	#define GL_GLEXT_PROTOTYPES
-	#include <GLES/gl.h>
+	/*#include <GLES/gl.h>
 	#include <GLES/glext.h>
 	#include <GLES2/gl2.h>
 	#include <GLES2/gl2ext.h>
@@ -281,7 +281,7 @@ enum ofTargetPlatform{
 	#include <GL/glew.h>
 
 	#include "EGL/egl.h"
-	#include "EGL/eglext.h"
+	#include "EGL/eglext.h"*/
 
 	#define TARGET_LITTLE_ENDIAN
 #endif

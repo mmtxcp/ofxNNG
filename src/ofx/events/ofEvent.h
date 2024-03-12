@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <vector>
 #include <functional>
@@ -15,7 +15,25 @@
 #include <iostream>
 #include <array>
 
+#include <memory>
 
+//#if defined(_MSC_VER) && _MSC_VER <= 1900  // If using Visual Studio 2015 or older
+//namespace std {
+//    template<typename T, typename... Args>
+//    std::unique_ptr<T> make_unique(Args&&... args) {
+//        return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+//    }
+//}
+//#endif
+
+#if defined(__GNUC__) &&  __cplusplus < 201402L // C++ 11 or older  // If using gcc 4.8.5 or older
+namespace std {
+    template<typename T, typename... Args>
+    std::unique_ptr<T> make_unique(Args&&... args) {
+        return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    }
+}
+#endif
 /*! \cond PRIVATE */
 namespace of{
 namespace priv{
@@ -573,8 +591,7 @@ public:
 			return false;
 		}
 	}
-	std::atomic<bool> notified_ { false };
-
+	std::atomic<bool> notified_;
 	inline bool notify(const void* sender, T & param) {
 		if (ofEvent<T,Mutex>::self->enabled) {
 			notified_.store(true, std::memory_order_relaxed);

@@ -1,4 +1,4 @@
-// Copyright 2006 Nemanja Trifunovic
+﻿// Copyright 2006 Nemanja Trifunovic
 
 /*
 Permission is hereby granted, free of charge, to any person or organization
@@ -75,6 +75,12 @@ DEALINGS IN THE SOFTWARE.
 #define UTF_CPP_OVERRIDE
 #define UTF_CPP_NOEXCEPT throw()
 #endif // C++ 11 or later
+
+//#if defined(_MSC_VER) && _MSC_VER >= 1910  // If using Visual Studio 2017 or newer
+//#define  UTF_HAS_STRING_VIEW 1
+//#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 9))  // If using gcc 4.9 or newer
+//#define  UTF_HAS_STRING_VIEW 1
+//#endif
 
 
 namespace utf8
@@ -807,7 +813,7 @@ namespace utf8
 
 #pragma endregion
 
-#elif UTF_CPP_CPLUSPLUS >= 201103L // C++ 11 or later
+//#elif UTF_CPP_CPLUSPLUS >= 201103L && defined(UTF_HAS_STRING_VIEW)// C++ 11 or later
 //#include "cpp11.h"
 #pragma region cpp11.h
 // Copyright 2018 Nemanja Trifunovic

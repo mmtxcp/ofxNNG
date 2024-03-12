@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <stddef.h>
 #include "nng.h"
@@ -22,10 +22,12 @@ public:
 	bool setup(const Settings &s=Settings()) {
 		int result;
 		result = nng_rep0_open(&socket_);
+        
 		if(result != 0) {
 			ofLogError("ofxNNGRep") << "failed to open socket;" << nng_strerror(result);
 			return false;
 		}
+        
 		setEnabledAutoUpdate(!s.allow_callback_from_other_thread);
 		work_.initialize(s.max_queue, &Rep::async, this);
 		while(auto work = work_.getUnused()) {

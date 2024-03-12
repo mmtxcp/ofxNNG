@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // MARK: TARGET_MINGW test
 #include "ofx/utils/ofConstants.h"
@@ -229,35 +229,35 @@ int ofGetWeekday();
 
 /// \section Containers
 
-namespace of {
+//namespace of {
+//
+///// \brief Randomly reorder the values in a container.
+///// \tparam Args Any container that meets std::shuffle's requirements
+///// which are: ValueSwappable and LegacyRandomAccessIterator.
+//template <class T>
+//void shuffle(T & values) {
+//	std::shuffle(values.begin(), values.end(), of::random::gen());
+//}
+//}
 
-/// \brief Randomly reorder the values in a container.
-/// \tparam Args Any container that meets std::shuffle's requirements
-/// which are: ValueSwappable and LegacyRandomAccessIterator.
-template <class T>
-void shuffle(T & values) {
-	std::shuffle(values.begin(), values.end(), of::random::gen());
-}
-}
-
-/// \brief Randomly reorder the values in a container.
-/// \tparam T Any container that meets std::shuffle's requirements
-/// which are: ValueSwappable and LegacyRandomAccessIterator.
-template <typename... Args>
-void ofShuffle(Args &&... args) {
-	of::shuffle(std::forward<Args>(args)...);
-}
-
-/// \section Vectors
-/// \brief Randomly reorder the values in a vector.
-/// \tparam T the type contained by the vector.
-/// \param values The vector of values to modify.
-
-template <class T>
-//[[deprecated("use ofShuffle or of::shuffle")]]
-void ofRandomize(std::vector<T> & values) {
-	of::shuffle(values);
-}
+///// \brief Randomly reorder the values in a container.
+///// \tparam T Any container that meets std::shuffle's requirements
+///// which are: ValueSwappable and LegacyRandomAccessIterator.
+//template <typename... Args>
+//void ofShuffle(Args &&... args) {
+//	of::shuffle(std::forward<Args>(args)...);
+//}
+//
+///// \section Vectors
+///// \brief Randomly reorder the values in a vector.
+///// \tparam T the type contained by the vector.
+///// \param values The vector of values to modify.
+//
+//template <class T>
+////[[deprecated("use ofShuffle or of::shuffle")]]
+//void ofRandomize(std::vector<T> & values) {
+//	of::shuffle(values);
+//}
 
 /// \brief Conditionally remove values from a vector.
 ///

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ofx/utils/ofLog.h"
 #include "ofx/events/ofEvents.h"
 #include "nng.h"
@@ -61,6 +61,7 @@ protected:
 		return true;
 	}
 	bool start(int flags=NNG_FLAG_NONBLOCK) {
+        
 		auto result = nng_dialer_start(dialer_, flags);
 		if(result != 0) {
 			return false;
@@ -117,8 +118,10 @@ public:
 		setEnabledAutoUpdate(false);
 		close();
 	}
-	std::shared_ptr<Pipe> createDialer(const std::string &url) {
-		return createPipe<Dialer>(url);
+	std::shared_ptr<Pipe> createDialer(const std::string &url, int reconnmint = 0) {
+		 std::shared_ptr<Pipe> pipe = createPipe<Dialer>(url);
+         nng_setopt_ms(socket_, NNG_OPT_RECONNMINT, reconnmint);
+         return pipe;
 	}
 	std::shared_ptr<Pipe> createListener(const std::string &url) {
 		return createPipe<Listener>(url);
@@ -129,6 +132,10 @@ public:
 	}
 	void setRecvMaxSize(std::size_t size) {
 		nng_setopt_size(socket_, NNG_OPT_RECVMAXSZ, size);
+	}
+	nng_socket& getsocket()
+	{
+		return socket_;
 	}
 protected:
 	nng_socket socket_;
@@ -157,4 +164,55 @@ protected:
 	}
 	virtual void update(){}
 };
+
+#if _MSC_VER || (defined(__GNUC__) && (__GNUC__ > 5 || (__GNUC__ == 5 && __GNUC_MINOR__ >= 1)))
+template<typename ...Args>
+struct MessageConvFunc {
+    std::tuple<std::reference_wrapper<Args>...> args;
+    MessageConvFunc(Args&... refs) : args(std::ref(refs)...) {}
+    void operator()(Message msg) {
+        msg.to(refs...);
+    }
+};
+#else
+// 实现 index_sequence
+template <std::size_t... Ints>
+struct index_sequence {};
+
+template <std::size_t N, std::size_t... Next>
+struct make_index_sequence_helper : make_index_sequence_helper<N - 1, N - 1, Next...> {};
+
+template <std::size_t... Next>
+struct make_index_sequence_helper<0, Next...> {
+    using type = index_sequence<Next...>;
+};
+
+template <std::size_t N>
+using make_index_sequence = typename make_index_sequence_helper<N>::type;
+
+// 实现 index_sequence_for
+template <typename... Ts>
+using index_sequence_for = make_index_sequence<sizeof...(Ts)>;
+
+template<typename Function, typename... Args, std::size_t... I>
+void apply_helper(Function&& func, std::tuple<Args...>&& args, make_index_sequence<I...>) {
+    func(std::forward<Args>(std::get<I>(args))...);
+}
+
+template<typename Function, typename... Args>
+void apply(Function&& func, std::tuple<Args...>&& args) {
+    apply_helper(std::forward<Function>(func), std::move(args), index_sequence_for<Args...>());
+}
+
+template<typename ...Args>
+struct MessageConvFunc {
+    std::tuple<Args&...> args;
+    MessageConvFunc(Args&... refs) : args(refs...) {}
+    void operator()(Message msg) {
+        apply([this, &msg](Args&&... refs) { msg.to(std::forward<decltype(refs)>(refs)...); }, std::move(args));
+    }
+};
+#endif
+template<typename ...Ref>
+MessageConvFunc<Ref&...> defaultMsgConvFun(refs...);
 }

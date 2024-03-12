@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "nng.h"
 #include "protocol/bus0/bus.h"
@@ -35,9 +35,10 @@ public:
 	}
 	template<typename ...Ref>
 	void setCallback(Ref &...refs) {
-		callback_ = [&refs...](Message msg) {
+        callback_ = defaultMsgConvFun;
+		/*callback_ = [&refs...](Message msg) {
 			msg.to(refs...);
-		};
+		};*/
 	}
 	bool send(Message msg, bool blocking=false) {
 		int result;
