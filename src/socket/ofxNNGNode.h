@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+
 namespace ofxNNG {
 class Pipe
 {
@@ -165,7 +166,7 @@ protected:
 	virtual void update(){}
 };
 
-#if _MSC_VER || (defined(__GNUC__) && (__GNUC__ > 5 || (__GNUC__ == 5 && __GNUC_MINOR__ >= 1)))
+#if _MSC_VER || (defined(__GNUC__) && (__GNUC__ > 7 || (__GNUC__ == 7 && __GNUC_MINOR__ >= 3)))
 template<typename ...Args>
 struct MessageConvFunc {
     std::tuple<std::reference_wrapper<Args>...> args;
@@ -174,6 +175,38 @@ struct MessageConvFunc {
         msg.to(refs...);
     }
 };
+#else
+#if  (defined(__GNUC__) && (__GNUC__ > 5 || (__GNUC__ == 5 && __GNUC_MINOR__ >= 1)))
+template <std::size_t... Ints>
+struct index_sequence {};
+
+template <std::size_t N, std::size_t... Next>
+struct make_index_sequence_helper : make_index_sequence_helper<N - 1, N - 1, Next...> {};
+
+template <std::size_t... Next>
+struct make_index_sequence_helper<0, Next...> {
+    using type = index_sequence<Next...>;
+};
+
+template <std::size_t N>
+struct make_index_sequence {
+    using type = typename make_index_sequence_helper<N>::type;
+};
+
+template <typename... Ts>
+struct index_sequence_for {
+    using type = typename make_index_sequence<sizeof...(Ts)>::type;
+};
+
+template<typename Function, typename... Args, std::size_t... I>
+void apply_helper(Function&& func, std::tuple<Args...>& args, index_sequence<I...>) {
+    func(std::forward<Args>(std::get<I>(args))...);
+}
+
+template<typename Function, typename... Args>
+void apply(Function&& func, std::tuple<Args...>& args) {
+    apply_helper(std::forward<Function>(func), args, typename index_sequence_for<Args...>::type());
+}
 #else
 // 实现 index_sequence
 template <std::size_t... Ints>
@@ -193,7 +226,6 @@ using make_index_sequence = typename make_index_sequence_helper<N>::type;
 // 实现 index_sequence_for
 template <typename... Ts>
 using index_sequence_for = make_index_sequence<sizeof...(Ts)>;
-
 template<typename Function, typename... Args, std::size_t... I>
 void apply_helper(Function&& func, std::tuple<Args...>&& args, make_index_sequence<I...>) {
     func(std::forward<Args>(std::get<I>(args))...);
@@ -203,6 +235,8 @@ template<typename Function, typename... Args>
 void apply(Function&& func, std::tuple<Args...>&& args) {
     apply_helper(std::forward<Function>(func), std::move(args), index_sequence_for<Args...>());
 }
+#endif
+
 
 template<typename ...Args>
 struct MessageConvFunc {
@@ -213,6 +247,6 @@ struct MessageConvFunc {
     }
 };
 #endif
-template<typename ...Ref>
-MessageConvFunc<Ref&...> defaultMsgConvFun(refs...);
+//template<typename ...Ref>
+//MessageConvFunc<Ref&...> defaultMsgConvFun( refs...);
 }

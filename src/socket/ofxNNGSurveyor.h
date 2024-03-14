@@ -44,7 +44,7 @@ public:
 	}
 	template<typename ...Ref>
 	bool send(Message msg, Ref &...refs) {
-        return sendImpl(msg, defaultMsgConvFun);
+        return sendImpl(msg, MessageConvFunc<Ref&...>( refs...));
 		/*return sendImpl(msg, [&refs...](Message msg) {
 			msg.to(refs...);
 		});*/

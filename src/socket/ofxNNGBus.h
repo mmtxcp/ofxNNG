@@ -35,7 +35,7 @@ public:
 	}
 	template<typename ...Ref>
 	void setCallback(Ref &...refs) {
-        callback_ = defaultMsgConvFun;
+        callback_ = MessageConvFunc<Ref&...>( refs...);
 		/*callback_ = [&refs...](Message msg) {
 			msg.to(refs...);
 		};*/

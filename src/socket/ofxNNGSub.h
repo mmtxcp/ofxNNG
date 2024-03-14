@@ -56,14 +56,14 @@ public:
 	}
 	template<typename ...Ref>
 	bool subscribe(const std::string &topic, Ref &...refs) {
-		return subscribe(topic.data(), topic.size(), defaultMsgConvFun);
+		return subscribe(topic.data(), topic.size(), MessageConvFunc<Ref&...>( refs...));
         /*return subscribe(topic.data(), topic.size(), [&refs...](Message msg) {
 			msg.to(refs...);
 		});*/
 	}
 	template<typename ...Ref>
 	bool subscribe(const std::pair<const void*, std::size_t> &topic, Ref &...refs) {
-        return subscribe(topic.first, topic.second, defaultMsgConvFun);
+        return subscribe(topic.first, topic.second, MessageConvFunc<Ref&...>( refs...));
         /*return subscribe(topic.first, topic.second, [&refs...](Message msg) {
             msg.to(refs...);
         });*/
